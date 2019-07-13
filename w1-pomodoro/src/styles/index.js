@@ -16,6 +16,9 @@ const base = css`
     margin: 0;
     height: 100%;    
   }
+  .modebar {
+      display: none !important;
+  }
 `
 export default createGlobalStyle`  
   ${base};  

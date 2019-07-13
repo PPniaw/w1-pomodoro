@@ -27,6 +27,15 @@ const initialState = {
       selected: false,
       initialTime: 1500,
       time: 1500
+    },
+    {
+      id: 2,
+      name: 'WHATS DONE IS DONE',
+      done: true,
+      tomatoes: 3,
+      selected: false,
+      initialTime: 1500,
+      time: 0
     }    
   ]
 };
