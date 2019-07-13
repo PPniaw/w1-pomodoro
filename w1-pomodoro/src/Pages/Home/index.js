@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 /** Components */
@@ -98,27 +98,24 @@ class Home extends React.Component {
       newMissionName: '',      
     }
   }
-  countdown = () => {
-    this.setState({
-      time: this.state.time - 1
-    })
-  }
+
   setCountdown = (boolean) => {    
-    this.props.setCountdownAction(boolean)
+    this.props.setCountdownAction(boolean)    
   }
 
-  timer = () => {        
-    if(!this.props.isCountdown) return
+  timer = () => {
     if(this.props.missions.find(x => x.selected) && (this.props.missions.find(x => x.selected).time <= 0)) {
+      this.props.setInitialTime()
       return this.setCountdown(false)      
     }        
-    this.props.countdown()    
-    this.startTimer()    
+    if(!this.props.isCountdown) return    
+    this.props.countdown()
+    setTimeout(this.timer, 1000)  
   }
 
   startTimer = async () => {    
-    await this.setCountdown(true)    
-    setTimeout(this.timer, 1000)
+    await this.setCountdown(true)
+    setTimeout(this.timer, 1000)    
   }
 
   render() {
@@ -193,7 +190,8 @@ const mapDispatchToProps = (dispatch) => {
     finishMission: (missionId) => dispatch(Actions.finishMission(missionId)),
     selectMission: (missionId) => dispatch(Actions.selectMission(missionId)),
     countdown: (missionId) => dispatch(Actions.countDown(missionId)),
-    setCountdownAction: (isCountdown) => dispatch(Actions.setCountdown(isCountdown))
+    setCountdownAction: (isCountdown) => dispatch(Actions.setCountdown(isCountdown)),
+    setInitialTime: () => dispatch(Actions.setInitialTime()),
   }
 }
 export default connect(  

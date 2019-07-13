@@ -2,6 +2,13 @@ import produce from 'immer';
 
 const initialState = {
   isCountdown: false,
+  isBreakTime: false,
+  BreakDefaultTime: 300,
+  BreaktTime: 300,
+  sound: {
+    break: 'default',
+    work: 'babySound'
+  },
   missions: [
     {
       id: 1,
@@ -43,9 +50,7 @@ const appReducer = (state = initialState, action) => produce(state, draft => {
         draft.missions.find(x => x.id === action.payload.missionId).selected = true  
       }
       draft.missions.find(x => x.id === action.payload.missionId).selected = false
-      draft.missions.find(x => x.id === action.payload.missionId).done = true
-      
-      // if (!draft.missions.find(x => x.id === action.payload.missionId + 1)) return
+      draft.missions.find(x => x.id === action.payload.missionId).done = true          
       if (!draft.missions.find(x => x.selected) && draft.missions.filter(x => !x.done).length > 0) {
         const sortById = (a, b) => {
           return a.id - b.id;
@@ -58,16 +63,27 @@ const appReducer = (state = initialState, action) => produce(state, draft => {
       draft.missions.find(x => x.selected) && (draft.missions.find(x => x.selected).selected = false)
       draft.missions.find(x => x.id === action.payload.missionId) && (draft.missions.find(x => x.id === action.payload.missionId).selected = true)
       break;
-    case 'COUNT_DOWN':      
+    case 'COUNT_DOWN':         
       draft.missions.find(x => x.selected) && (draft.missions.find(x => x.selected).time = draft.missions.find(x => x.selected).time - 1)
       if (draft.missions.find(x => x.selected).time === 0) {
         draft.missions.find(x => x.selected).tomatoes += 1;
-        draft.missions.find(x => x.selected).time = draft.missions.find(x => x.selected).initialTime;      
-      }
-      
+        draft.isCountdown = false         
+      } 
       break;
     case 'SET_COUNT_DOWN':      
       draft.isCountdown = action.payload.isCountdown
+      break;
+    case 'SET_INITIAL_TIME':      
+      draft.missions.find(x => x.selected).time = draft.missions.find(x => x.selected).initialTime
+      break;   
+    case 'SET_WORK_SOUND':            
+      draft.sound.work = action.payload.sound
+      break;
+    case 'SET_BREAK_SOUND':      
+      draft.sound.break = action.payload.sound
+      break;
+    case 'SET_BREAK_MODE':      
+      draft.isBreakTime = action.payload.isBreakTime
       break;  
     default:
       break;

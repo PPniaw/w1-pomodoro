@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import * as Actions from '../../actions';
 import CheckCircleOutline from '@material-ui/icons/CheckCircleOutline';
-import { transform } from 'async';
 
 const StyledInput = styled.input`   
   border: none;  
