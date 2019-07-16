@@ -5,18 +5,21 @@ import { BrowserRouter as RouterProvider } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import GlobalStyles from './styles';
 import { Provider as ReduxProvider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { createLogger} from 'redux-logger';
 import appReducer from './reducer';
 
-
-const store = createStore(appReducer)
+const logger = createLogger({
+  collapsed: true,
+});
+const store = createStore(appReducer, applyMiddleware(logger));
 
 ReactDOM.render(
   <ReduxProvider store={store}>
     <RouterProvider>
       <GlobalStyles />
       <App />
-    </RouterProvider>    
+    </RouterProvider>
   </ReduxProvider>
   , document.getElementById('root')
 );

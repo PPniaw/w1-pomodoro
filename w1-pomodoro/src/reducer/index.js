@@ -29,21 +29,21 @@ const initialState = {
       time: 1500
     },
     {
-      id: 2,
+      id: 3,
       name: 'WHATS DONE IS DONE',
       done: true,
       tomatoes: 3,
       selected: false,
       initialTime: 1500,
       time: 0
-    }    
+    }
   ]
 };
 
-const appReducer = (state = initialState, action) => produce(state, draft => {  
+const appReducer = (state = initialState, action) => produce(state, draft => {
   switch (action.type) {
     case 'ADD_MISSION':
-      if (!action.payload.newMissionName) return  
+      if (!action.payload.newMissionName) return
       draft.missions.push({
         id: draft.missions.length + 1,
         name: action.payload.newMissionName,
@@ -55,45 +55,45 @@ const appReducer = (state = initialState, action) => produce(state, draft => {
       });
       break;
     case 'FINISH_MISSION':
-      if(draft.missions.filter(x => x.selected).length === 0) {        
-        draft.missions.find(x => x.id === action.payload.missionId).selected = true  
+      if(draft.missions.filter(x => x.selected).length === 0) {
+        draft.missions.find(x => x.id === action.payload.missionId).selected = true
       }
       draft.missions.find(x => x.id === action.payload.missionId).selected = false
-      draft.missions.find(x => x.id === action.payload.missionId).done = true          
+      draft.missions.find(x => x.id === action.payload.missionId).done = true
       if (!draft.missions.find(x => x.selected) && draft.missions.filter(x => !x.done).length > 0) {
         const sortById = (a, b) => {
           return a.id - b.id;
         }
         draft.missions.filter(x => !x.done).sort(sortById)
         draft.missions.filter(x => !x.done)[0].selected = true
-      }      
+      }
       break;
     case 'SELECT_MISSION':
       draft.missions.find(x => x.selected) && (draft.missions.find(x => x.selected).selected = false)
       draft.missions.find(x => x.id === action.payload.missionId) && (draft.missions.find(x => x.id === action.payload.missionId).selected = true)
       break;
-    case 'COUNT_DOWN':         
+    case 'COUNT_DOWN':
       draft.missions.find(x => x.selected) && (draft.missions.find(x => x.selected).time = draft.missions.find(x => x.selected).time - 1)
       if (draft.missions.find(x => x.selected).time === 0) {
         draft.missions.find(x => x.selected).tomatoes += 1;
-        draft.isCountdown = false         
-      } 
+        draft.isCountdown = false
+      }
       break;
-    case 'SET_COUNT_DOWN':      
+    case 'SET_COUNT_DOWN':
       draft.isCountdown = action.payload.isCountdown
       break;
-    case 'SET_INITIAL_TIME':      
+    case 'SET_INITIAL_TIME':
       draft.missions.find(x => x.selected).time = draft.missions.find(x => x.selected).initialTime
-      break;   
-    case 'SET_WORK_SOUND':            
+      break;
+    case 'SET_WORK_SOUND':
       draft.sound.work = action.payload.sound
       break;
-    case 'SET_BREAK_SOUND':      
+    case 'SET_BREAK_SOUND':
       draft.sound.break = action.payload.sound
       break;
-    case 'SET_BREAK_MODE':      
+    case 'SET_BREAK_MODE':
       draft.isBreakTime = action.payload.isBreakTime
-      break;  
+      break;
     default:
       break;
   }
